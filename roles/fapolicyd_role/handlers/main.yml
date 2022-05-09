@@ -1,0 +1,6 @@
+---
+# handlers file for roles/fapolicyd_role
+
+- name: Update fapolicyd
+  ansible.builtin.command: 'fapolicyd-cli --update'
+

@@ -1,0 +1,5 @@
+---
+- name: Deploy aide
+  hosts: localhost
+  roles:
+    - aide_role

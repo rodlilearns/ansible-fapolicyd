@@ -1,0 +1,11 @@
+---
+- name: Deploy fapolicyd
+  hosts: localhost
+  become: yes
+  vars:
+    splunk_platform_directories:
+      - path: /opt/splunk
+      - path: /opt/splunk/var/lib/splunk
+  roles:
+    - fapolicyd_role #This role deploys the fapolicyd (application control) capability
+    - aide_role #This role deploys the AIDE (file integrity checking) capability

@@ -1,0 +1,24 @@
+---
+# tasks file for roles/fapolicyd_role
+- name: Ensure that fapolicyd is installed
+  ansible.builtin.dnf:
+    name: fapolicyd
+    state: installed
+
+- name: Ensure that fapolicyd is enabled and configured
+  ansible.builtin.service:
+    name: fapolicyd
+    state: started
+    enabled: yes
+
+- name: Template out the fapolicyd configuration file
+  ansible.builtin.template:
+    src: fapolicyd.conf.j2
+    dest: /etc/fapolicyd/fapolicyd.conf
+
+- name: Template out the latest rules file
+  ansible.builtin.template:
+    src: fapolicyd.rules.j2
+    dest: /etc/fapolicyd/fapolicyd.rules
+  notify: 
+    - Update fapolicyd

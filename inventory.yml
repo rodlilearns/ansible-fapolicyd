@@ -1,0 +1,6 @@
+---
+all:
+  hosts:
+  children:
+    splunk_indexers:
+      hosts:
