@@ -1,0 +1,5 @@
+{% if rules is iterable %}
+{% for rule in rules %}
+{{ rule.decision }} perm={{ rule.perm }} {{ rule.subject }} : {{ rule.object }}
+{% endfor %}
+{% endif %}
