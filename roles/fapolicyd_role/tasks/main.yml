@@ -16,9 +16,14 @@
     src: fapolicyd.conf.j2
     dest: /etc/fapolicyd/fapolicyd.conf
 
+- name: Ensure the old rules file doesn't exist and conflict with the new rules file
+  ansible.builtin.file:
+    path: /etc/fapolicyd/fapolicyd.rules
+    state: absent
+
 - name: Template out the latest rules file
   ansible.builtin.template:
-    src: fapolicyd.rules.j2
-    dest: /etc/fapolicyd/fapolicyd.rules
+    src: 80-mysplunk.rules.j2
+    dest: /etc/fapolicyd/rules.d/80-mysplunk.rules
   notify: 
     - Update fapolicyd
