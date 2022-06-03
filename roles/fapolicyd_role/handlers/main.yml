@@ -1,6 +1,21 @@
 ---
 # handlers file for roles/fapolicyd_role
 
-- name: Update fapolicyd
-  ansible.builtin.command: 'fapolicyd-cli --update'
+- name: Update rules
+  block:
+    - name: Check the list of compiled rules differs from the original rule set
+      ansible.builtin.command: fagenrules --check
+      register: result_fagenrules
+
+    - name: Update the compiled rules list
+      ansible.builtin.command: fagenrules --update
+      when: result_fagenrules.stdout == "Rules have changed and should be updated"
+
+    - name: Update fapolicyd
+      ansible.builtin.command: 'fapolicyd-cli --update'
+
+    - name: Restart fapolicyd
+      ansible.builtin.service:
+        name: fapolicyd
+        state: restarted
 
