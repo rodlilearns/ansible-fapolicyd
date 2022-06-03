@@ -3,9 +3,23 @@
   hosts: localhost
   become: yes
   vars:
-    splunk_platform_directories:
-      - path: /opt/splunk
-      - path: /opt/splunk/var/lib/splunk
+    rules:
+      - decision: allow
+        perm: execute
+        subject: exe/usr/bin/bash trust=1
+        object: dir=/opt/splunk/bin/ all trust=0
+      - decision: allow
+        perm: open
+        subject: exe=/usr/bin/bash trust=1
+        object: dir=/opt/splunk/lib/ all trust=0
+      - decision: allow
+        perm: open
+        subject: exe=/opt/splunk
+        object: ftype=text/x-python trust=1
+      - decision: allow
+        perm: open
+        subject: exe=/opt/splunk/bin/python3.7
+        object: ftype=text/x-python trust=1
+        
   roles:
     - fapolicyd_role #This role deploys the fapolicyd (application control) capability
-    - aide_role #This role deploys the AIDE (file integrity checking) capability
