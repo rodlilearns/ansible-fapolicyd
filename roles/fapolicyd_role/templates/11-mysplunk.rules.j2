@@ -1,0 +1,6 @@
+allow perm=execute exe=/usr/bin/bash trust=1 : dir=/opt/splunk/bin/ all trust=0
+allow perm=open exe=/usr/bin/bash trust=1 : dir=/opt/splunk/lib/ all trust=0
+allow perm=open exe=/opt/splunk/bin/python3.7 : ftype=text/x-python trust=1
+allow perm=open exe=/opt/splunk/lib/python3.7 : ftype=text/x-python trust=1
+allow perm=execute exe=/opt/splunk/bin/splunkd : dir=/opt/splunk/bin/
+allow perm=open exe=/opt/splunk/bin : dir=/opt/splunk/lib
