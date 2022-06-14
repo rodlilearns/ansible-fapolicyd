@@ -11,6 +11,12 @@
       ansible.builtin.command: fagenrules --update
       when: result_fagenrules.stdout == "Rules have changed and should be updated"
 
+    - name: Ensure fapolicyd is started
+      ansible.builtin.service:
+        name: fapolicyd
+        state: started
+        enabled: yes
+
     - name: Update fapolicyd
       ansible.builtin.command: 'fapolicyd-cli --update'
 
@@ -18,4 +24,3 @@
       ansible.builtin.service:
         name: fapolicyd
         state: restarted
-
