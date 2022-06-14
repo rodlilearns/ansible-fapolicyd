@@ -5,11 +5,11 @@
     name: fapolicyd
     state: installed
 
-- name: Ensure that fapolicyd is enabled and configured
+- name: Ensure that fapolicyd is stopped
   ansible.builtin.service:
     name: fapolicyd
-    state: started
-    enabled: yes
+    state: stopped
+    enabled: no
 
 - name: Template out the fapolicyd configuration file
   ansible.builtin.template:
@@ -21,9 +21,68 @@
     path: /etc/fapolicyd/fapolicyd.rules
     state: absent
 
-- name: Template out the latest rules file
+- name: Template out languages rules
   ansible.builtin.template:
-    src: 80-mysplunk.rules.j2
-    dest: /etc/fapolicyd/rules.d/80-mysplunk.rules
-  notify: 
+    src: 10-languages.rules.j2
+    dest: /etc/fapolicyd/rules.d/10-languages.rules
+
+- name: Template out dracut rules
+  ansible.builtin.template:
+    src: 20-dracut.rules.j2
+    dest: /etc/fapolicyd/rules.d/20-dracut.rules
+
+- name: Template out updaters rules
+  ansible.builtin.template:
+    src: 21-updaters.rules.j2
+    dest: /etc/fapolicyd/rules.d/21-updaters.rules
+
+- name: Template out pattern rules
+  ansible.builtin.template:
+    src: 30-pattern.rules.j2
+    dest: /etc/fapolicyd/rules.d/30-pattern.rules
+
+- name: Template out bad-elf rules
+  ansible.builtin.template:
+    src: 40-bad-elf.rules.j2
+    dest: /etc/fapolicyd/rules.d/40-bad-elf.rules
+
+- name: Template out shared-obj rules
+  ansible.builtin.template:
+    src: 41-shared-obj.rules.j2
+    dest: /etc/fapolicyd/rules.d/41-shared-obj.rules
+
+- name: Template out trusted-elf rules
+  ansible.builtin.template:
+    src: 42-trusted-elf.rules.j2
+    dest: /etc/fapolicyd/rules.d/42-trusted-elf.rules
+
+- name: Template out trusted-lang rules
+  ansible.builtin.template:
+    src: 70-trusted-lang.rules.j2
+    dest: /etc/fapolicyd/rules.d/70-trusted-lang.rules
+
+- name: Template out shell rules
+  ansible.builtin.template:
+    src: 72-shell.rules.j2
+    dest: /etc/fapolicyd/rules.d/72-shell.rules
+
+- name: Template out deny-execute rules
+  ansible.builtin.template:
+    src: 90-deny-execute.rules.j2
+    dest: /etc/fapolicyd/rules.d/72-shell.rules
+
+- name: Template out allow-open rules
+  ansible.builtin.template:
+    src: 95-allow-open.rules.j2
+    dest: /etc/fapolicyd/rules.d/95-allow-open.rules
+
+- name: Template out mysplunk rules
+  ansible.builtin.template:
+    src: 11-mysplunk.rules.j2
+    dest: /etc/fapolicyd/rules.d/11-mysplunk.rules
+  notify:
+    - Check the list of compiled rules differs from the original rule set
+    - Update the compiled rules list
+    - Ensure fapolicyd is started
     - Update fapolicyd
+    - Restart fapolicyd
